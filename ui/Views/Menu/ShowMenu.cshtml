@@ -1,0 +1,65 @@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<p><b><a href="/Menu/AddMenu">Add Menu</a></b></p>
+    <p><b><a href="#">#</a></b></p>
+    
+<section id="about" class="wow fadeInUp">
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"><b>S.N.</b></th>
+                    <th scope="col"><b>Menu</b></th>
+                    <th scope="col"><b>Menu URL</b> </th>
+                    <th scope="col"><b>Under</b> </th>
+                    <th scope="col"><b>Is Open</b> </th>
+                    <th scope="col"><b>Is Active</b> </th>
+                </tr>
+            </thead>
+            <tbody id="tableMenuBody">
+                @{
+                    var i = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.Menu</td>
+                            <td>@item.MenuURL</td>
+                            <td>@item.Under</td>
+                            <td>@item.IsOpen</td>
+                            <td>@item.IsActive</td>
+                            <td>
+                                <button class="btn editordelete btn-primary" data-bind="@item.MenuID" id="btnDeleteMenu">Delete Menu</button>
+                                @* <button class="btn editordelete btn-primary" data-bind="@item.MenuID" id="btnDeleteUserRole">Delete User Role</button> *@
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(function(){
+        $("#tableMenuBody").on("click","#btnDeleteMenu",function(){
+            debugger;
+            var MenuID = $(this).attr('data-bind');
+            $.ajax({
+                url: '/Menu/DeleteMenu?id='+MenuID,
+                type:'get',
+                async: false,
+                success: function(){
+                    alert("deleted successfully");
+                    window.location.href="/Menu/ShowMenu";
+                },
+                error: function(){
+                    alert("Error!")
+                }
+            });
+        });
+    });
+</script>

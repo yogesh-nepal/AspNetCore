@@ -1,0 +1,52 @@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section class="main">
+    <div class="main-content">
+        <div class="container-fluid">
+            <div class="panel pannel-ledger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Add Category</h3>
+                </div>
+                <div class="panel-body ">
+                    <form name="menuForm">
+                        <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="title"> Category Name :</label>
+                                        <input type="text" tabindex="1" class="form-control" placeholder="Enter Category Name" id="cname" name="cname">
+                                        <button style="align-self: center;" type="button" tabindex="2" class="btn btn-primary form-control" id="btnAddCategory">Add</button>
+                                    </div>
+                                </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p><b><a href="/User/UserList">Back to Home</a></b></p>
+</section>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(function(){
+        $("#btnAddCategory").on("click",function(){
+            var dataObj = {
+                Category: $("#cname").val()
+            }
+            $.ajax({
+                url: '/Category/AddCategory',
+                type:'Post',
+                data: dataObj,
+                async: false,
+                success: function(){
+                    alert("successfully added");
+                    window.location.href= "/Category/ShowCategory";
+                },
+                error: function(){
+                    alert("Error!")
+                }
+            });
+        });
+    });
+</script>

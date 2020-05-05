@@ -1,0 +1,81 @@
+@{
+    ViewData["Title"] = "UserList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <p><b><a href="/User/AddUser">Add User</a></b></p>
+    <p><b><a href="/UserRole/AddUserRole">Add User Role</a></b></p>
+    
+<section id="about" class="wow fadeInUp">
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"><b>S.N.</b></th>
+                    <th scope="col"><b>Name</b></th>
+                    <th scope="col"><b>Email</b> </th>
+                    <th scope="col"><b>Role</b> </th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                @{
+                    var i = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.UserName</td>
+                            <td>@item.EmailID</td>
+                            <td>@item.Role</td>
+                            <td>
+                                <button class="btn editordelete btn-primary" data-bind="@item.UserID" id="btnDeleteUser">Delete User</button>
+                                <button class="btn editordelete btn-primary" data-bind="@item.UserID" data-bindrole="@item.RoleID" id="btnDeleteUserRole">Delete User Role</button>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+ <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+$(function(){
+    $("#tableBody").on("click","#btnDeleteUser",function(){
+        var UserID = $(this).attr('data-bind');
+        $.ajax({
+            url: '/User/DeleteUser?id='+UserID,
+            type: "get",
+            async: false,
+            success: function(){
+                alert("User Deleted Successfully");
+                window.location.href="/User/UserList";
+            },
+            error: function(){
+                alert("Error!");
+            }
+        });
+    });
+     $("#tableBody").on("click","#btnDeleteUserRole",function(){
+         var dataObj  = {
+            UserID: $(this).attr('data-bind'),
+            RoleID: $(this).attr('data-bindrole') 
+         }
+        
+        $.ajax({
+            url: '/UserRole/DeleteUserRole',
+            data: dataObj,
+            type: 'post',
+            async: false,
+            success: function(){
+                alert("User Role Deleted!");
+                window.location.href="/User/UserList";
+            },
+            error: function(){
+                alert("Error!");
+        }
+        });
+    }); 
+});
+</script>

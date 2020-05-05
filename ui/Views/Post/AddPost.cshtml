@@ -1,0 +1,110 @@
+@model Models.PostModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h4>PostModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddPost" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CategoryID" class="control-label"></label>
+                @* <input asp-for="CategoryID" class="form-control" /> *@
+                <select asp-for="CategoryID" id="category"></select>
+                <span asp-validation-for="CategoryID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShortDescription" class="control-label"></label>
+                <input asp-for="ShortDescription" class="form-control" />
+                <span asp-validation-for="ShortDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FullDescription" class="control-label"></label>
+                <input asp-for="FullDescription" class="form-control" />
+                <span asp-validation-for="FullDescription" class="text-danger"></span>
+            </div>
+            @* <div class="form-group">
+                <label asp-for="PublishDate" class="control-label"></label>
+                <input asp-for="PublishDate" class="form-control" />
+                <span asp-validation-for="PublishDate" class="text-danger"></span>
+            </div> *@
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Remarks" class="control-label"></label>
+                <input asp-for="Remarks" class="form-control" />
+                <span asp-validation-for="Remarks" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AuthorName" class="control-label"></label>
+                <input asp-for="AuthorName" class="form-control" />
+                <span asp-validation-for="AuthorName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tag" class="control-label"></label>
+                <input asp-for="Tag" class="form-control" />
+                <span asp-validation-for="Tag" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Image</label>
+                <input type="file" name="imageUpload"  id="imageUpload"/>
+                <img id="uImg" src="#" height="150" width="150" alt="your image" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add Post" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(function(){
+        LoadCategory();
+        function LoadCategory(){
+            debugger;
+            $.ajax({
+            url: '/Category/GetAllCategory',
+            type: 'get',
+            dataType: 'json',
+            success: function(data){
+                $("#category").empty();
+                $("#category").append('<option value="0">Choose Category</option>');
+                $.each(data,function(i,item){
+                    $("#category").append('<option value="'+ item.categoryID +'">'+ item.category +'</option>');
+                });
+            },
+            error: function(){
+                alert("Error loading Category!")
+            }
+            });
+        }
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+            var reader = new FileReader();
+    
+            reader.onload = function(e) {
+                $('#uImg').attr('src', e.target.result);
+            }
+    
+            reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }   
+        }
+        $("#imageUpload").change(function() {
+            readURL(this);
+        });
+    });
+</script>

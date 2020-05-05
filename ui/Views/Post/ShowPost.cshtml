@@ -1,0 +1,68 @@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<p><b><a href="/Post/AddPost">Add Post</a></b></p>
+    
+<section id="about" class="wow fadeInUp">
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"><b>S.N.</b></th>
+                    <th scope="col"><b>Title</b></th>
+                    <th scope="col"><b>Short Description</b> </th>
+                    <th scope="col"><b>Image</b> </th>
+                    <th scope="col"><b>Author</b> </th>
+                    <th scope="col"><b>Updated By</b> </th>
+                    <th scope="col"><b>Active</b> </th>
+                    <th scope="col"><b>Action</b> </th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                @{
+                    var i = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.Title</td>
+                            <td>@item.ShortDescription</td>
+                            <td><img id="uImg" src="https://localhost:6001/Resource/@Url.Content(item.ImageURL)" height="100" width="100" alt="your image" /></td>
+                            <td>@item.AuthorName</td>
+                            <td>@item.UpdatedBy</td>
+                            <td>@item.IsActive</td>
+                            <td>
+                                <a class="btn btn-info" href="/Post/GetPostByID/@item.PostID" data-bind="@item.PostID" id="btnUpdate">Update</a>
+                                <a class="btn btn-info" data-bind="@item.PostID" id="btnDelete">Delete</a>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(function(){
+        $("#tableBody").on("click","#btnDelete",function(){
+            debugger;
+            var PostID = $(this).attr('data-bind');
+            $.ajax({
+                url:'/Post/DeletePost?id='+PostID,
+                type: 'get',
+                async: false,
+                success: function () {
+                    alert("Successfully Deleted")
+                    window.location.href="/Post/ShowPost";
+                },
+                error: function () {
+                    alert("Error!");
+                }
+            });
+            
+        });
+    });
+</script>

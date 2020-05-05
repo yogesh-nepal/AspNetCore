@@ -1,0 +1,57 @@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p><b><a href="/Category/AddCategory"><button class="btn editordelete btn-primary" type="button">Add Category</button></a></b></p>
+    <p><b><a href="#">#</a></b></p>
+    
+<section id="about" class="wow fadeInUp">
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"><b>S.N.</b></th>
+                    <th scope="col"><b>Category</b></th>
+                    <th scope="col"><b>Action</b></th>
+                </tr>
+            </thead>
+            <tbody id="tableCategoryBody">
+                @{
+                    var i = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.Category</td>
+                            <td>
+                                <button class="btn editordelete btn-primary" data-bind="@item.CategoryID" id="btnDeleteCategory">Delete</button>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(function(){
+        $("#tableCategoryBody").on("click","#btnDeleteCategory",function(){
+           var CategoryID = $(this).attr('data-bind');
+           $.ajax({
+                url:'/Category/DeleteCategory?id='+CategoryID,
+                type:'get',
+                async: false,
+                success: function(){
+                    alert("deleted successfully");
+                    window.location.href="/Category/ShowCategory";
+                },
+                error: function(){
+                    alert("Error!")
+                }
+           }); 
+        });
+    });
+</script>

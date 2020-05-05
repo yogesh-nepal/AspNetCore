@@ -1,0 +1,91 @@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="main">
+    <div class="main-content">
+        <div class="container-fluid">
+            <div class="panel pannel-ledger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Add Menu </h3>
+                </div>
+                <div class="panel-body ">
+                    <form name="menuForm">
+                        <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="title"> Menu Name :</label>
+                                        <input type="text" tabindex="1" class="form-control" placeholder="Enter Menu Name" id="mname" name="mname">
+                                        <label for="title"> Menu URL :</label>
+                                        <input type="text" tabindex="2" placeholder="Enter Menu URL" class="form-control" id="murl" name="murl">
+                                        <label for="title"> Is Open :</label>
+                                            <input type="checkbox" tabindex="3" id="io"><br/>
+                                        <label for="title"> Under :</label>
+                                        <select tabindex="4" id="selectUnder" name="selectUnder">
+                                            <option value="Home">Home</option>
+                                            <option value="0">Others</option>
+                                        </select><br/>
+                                            <label for="title"> Is Active :</label>
+                                            <input type="checkbox" tabindex="5" id="ia"><br/>
+                                        <button style="align-self: center;" type="button" tabindex="6" class="btn btn-primary form-control" id="btnAddMenu">Add</button>
+                                    </div>
+                                </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p><b><a href="/User/UserList">Back to Home</a></b></p>
+</section>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(function(){
+        $("#btnAddMenu").on("click",function(){ 
+            debugger;
+            validateForm();
+            var dataObj = {
+                Menu: $("#mname").val(),
+                IsOpen: $("#io").is(':checked'),
+                MenuURL: $("#murl").val(),
+                Under: $("#selectUnder").val(),
+                IsActive: $("#ia").is(':checked')
+            }
+            $.ajax({
+                url: "/Menu/AddMenu",
+                type:"POST",
+                data: dataObj,
+                async: false,
+                success: function(){
+                    alert("Successfully added!");
+                    window.location.href="/Menu/ShowMenu";
+                },
+                error: function(){
+                    alert("Error!")
+                }
+            });
+        });
+
+        function validateForm(){
+            debugger;
+            var menuName = document.menuForm.mname.value;
+            var menuURL = document.menuForm.murl.value;
+            var under = document.menuForm.selectUnder.value;
+
+            if(menuName == ""){
+                alert("Please provide Menu Name!")
+                document.menuForm.mname.focus();
+            }
+            if(menuURL == ""){
+                alert("Please provide Menu URL!")
+                document.menuForm.murl.focus();
+
+            }
+            if(under == "0"){
+                alert("Please Select Under Option!")
+                document.menuForm.selectUnder.focus();
+            }
+        }
+    });
+</script>

@@ -1,0 +1,73 @@
+@{
+    ViewData["Title"]="AddUserRole";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<label for="title"> Email :</label>
+<select id="uid" tabindex="1" class="form-control"></select>
+<label for="title"> Role :</label>
+<select id="roleid" tabindex="2" class="form-control"></select>
+ <button type="button" tabindex="3" class="btn btn-primary form-control" id="btnAdd">Add</button>
+ <br/>
+<p><b><a href="/User/UserList">Back to Home</a></b></p>
+ <script src="~/lib/jquery/dist/jquery.min.js"></script>
+ <script>
+     $(function(){
+         LoadRole();
+         LoadUser();
+         $("#btnAdd").on("click",function(){
+             debugger
+            var dataObj = {
+                 UserID: $("#uid").val(),
+                 RoleID: $("#roleid").val()
+             }
+             $.ajax({
+                 url: '/UserRole/AddUserRole',
+                 data: dataObj,
+                 type: 'Post',
+                 async: false,
+                 success: function(){
+                     alert("Added Role Successfully")
+                     window.location.href="/User/UserList";
+                 },
+                 error: function(){
+                     alert("Error Adding Role")
+                 }
+             });
+         });
+     });
+
+     function LoadUser(){
+         $.ajax({
+            url: '/User/GetAllUser',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function(data){
+                $("#uid").empty();
+                $("#uid").append('<option value="0">Choose User</option>');
+                $.each(data,function(i,item){
+                    $("#uid").append('<option value="'+ item.userID +'">'+ item.emailID +'</option>');
+                });
+            }
+         });
+     }
+
+
+     function LoadRole(){
+         $.ajax({
+            url: '/Role/GetAllRole', 
+            type: 'get',
+            dataType: 'json',
+            success: function(data){
+                $("#roleid").empty();
+                $("#roleid").append('<option value="0">Choose Role</option>');
+                $.each(data,function(i,item){
+                    $("#roleid").append('<option value="'+ item.roleID +'">'+ item.role +'</option>');
+                });
+            },
+            error: function(){
+                alert("Error loading Role!")
+            }
+         });
+     }
+ </script>

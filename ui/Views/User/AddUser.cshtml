@@ -1,0 +1,128 @@
+@{
+    ViewData["Titile"] = "AddUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="main">
+    <div class="main-content">
+        <div class="container-fluid">
+            <div class="panel pannel-ledger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Add User </h3>
+                </div>
+                <div class="panel-body ">
+                    <form name="userForm">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="title"> First Name :</label>
+                                        <input type="text" tabindex="1" class="form-control" placeholder="Enter First Name" id="fname" name="fname">
+                                        <label for="title"> Address :</label>
+                                        <input type="text" tabindex="3" placeholder="Enter Address" class="form-control" id="address" name="address">
+                                        <label for="title"> Email :</label>
+                                        <input type="email" tabindex="5" placeholder="Enter your Email" class="form-control" id="email" name="email">
+                                        <label for="title"> Remarks :</label>
+                                        <input type="text" tabindex="7" placeholder="Remarks" class="form-control" id="remarks" name="remarks"><br/>
+                                        <label for="title"> Gender :</label>
+                                        <select tabindex="8" id="selectGender" name="selectGender">
+                                            <option value="0">Select Gender</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Others">Others</option>
+                                        </select><br/>
+                                            <label for="title"> Is Active :</label>
+                                            <input type="checkbox" tabindex="9" id="ia"><br/>
+                                        <button style="align-self: center;" type="button" tabindex="10" class="btn btn-primary form-control" id="btnAdd">Add</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="title"> Last Name :</label>
+                                        <input type="text" tabindex="2" placeholder="Enter last Name" class="form-control" name="lname" id="lname">
+                                        <label for="title"> Phone Number :</label>
+                                        <input type="text" tabindex="4" placeholder="Phone number" class="form-control" name="pno" id="pno">
+                                        <label for="title"> Password :</label>
+                                        <input type="password" tabindex="6" placeholder="Password" class="form-control" name="pwd" id="pwd">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p><b><a href="/User/UserList">Back to Home</a></b></p>
+</section>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(function(){
+            $("#btnAdd").on("click",function(){
+            validateForm();
+            var dataObj = {
+                UserName: $("#fname").val() +" "+ $("#lname").val(),
+                Address: $("#address").val(),
+                Phone:$("#pno").val(),
+                EmailID:$("#email").val(),
+                Gender:$("#selectGender").val(),
+                IsActive:$("#ia").is(':checked'),
+                Remarks:$("#remarks").val(),
+                Password:$("#pwd").val()
+            }
+            $.ajax({
+                url: "/User/AddUser",
+                type: "POST",
+                data: dataObj,
+                async: false,
+                success: function(){
+                     alert("Successfully Added!");
+                     window.location.href="/User/UserList";
+                },
+                error: function(){
+                    alert("Error!")
+                }
+            });
+        });
+    });    
+
+    function validateForm()
+    {
+        var firstName = document.userForm.fname.value;
+        var lastName = document.userForm.lname.value;
+        var address = document.userForm.address.value;
+        var pno = document.userForm.pno.value;
+        var email = document.userForm.email.value;
+        var pwd = document.userForm.pwd.value;
+        var selectGender = document.userForm.selectGender.value;
+
+        if(firstName == ""){
+            alert("Please provide your First Name!")
+            document.userForm.fname.focus();
+        }
+        if(lastName == "") {
+            alert("Please provide your Last Name!")
+            document.userForm.lname.focus();
+        }
+        if(address == ""){
+            alert("Please provide Address!")
+            document.userForm.address.focus();
+        }
+        if(selectGender == "0"){
+            alert("Please Select Gender!")
+            document.userForm.selectGender.focus();
+        }
+        if(pno.length < 10 || pno == ""){
+            alert("Please input correct phone number!")
+            document.userForm.pno.focus();
+        }
+        if(email.length<12 || email == ""){
+            alert("Please input correct Email!")
+            document.userForm.email.focus();
+        }
+        if(pwd.length<6){
+            alert("Password length ust be greater than 6!")
+            document.userForm.pwd.focus();
+        }
+    }
+</script>
